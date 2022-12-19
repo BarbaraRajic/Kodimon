@@ -10,6 +10,9 @@ Borba između pokemona. Pokemon s većom brzinom napada prvi a onaj koji prvi os
 * Klik na "Attack" pokreće napad pokemona
 * Logs prozorčić prati tijek igrice
 
+### Link
+[KODIMON](https://kodimon.glitch.me/)
+
 ### Za razvoj korišteno:
 
 * JavaScript, HTML, CSS
