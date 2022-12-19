@@ -94,7 +94,10 @@ class UIcontroller {
         if(percentage > 50) {
             barStyle.backgroundColor = "#62FF84";
             progressStyle.outline = "medium solid #079325";
-        }else {
+        }else if (percentage > 30) {
+            barStyle.backgroundColor = "#fb8c00";
+            progressStyle.outline = "medium solid #e65100";
+        }else if (percentage <= 30) {
             barStyle.backgroundColor = "#FF7575";
             progressStyle.outline = "medium solid #cf1616";
         }
@@ -213,7 +216,7 @@ class Pokemon {
         this.name,
         this.picture,
         this.percentage = 100;
-        this.hpLost;
+        this.hpLost = 0;
     }
 
     async fetchPokemon (id) {
@@ -257,11 +260,7 @@ class Pokemon {
         let lost = (attack) - (this.deffense / 100 * attack);
         lost = +lost.toFixed(2);
         // If deffence is much higher than enemy's attack - no damage recived
-        if(lost <= 0) {
-            lost = 0;
-            this.hpLost = lost;
-            return
-        }
+        if(lost <= 0) return
 
         this.hpLost = lost;
         this.percentage = Math.round(this.percentage - (100 * lost / this.hp));
@@ -274,6 +273,11 @@ class Pokemon {
             return true;
         }
         return false;
+    }
+
+    reset() {
+        this.hpLost = 0;
+        this.percentage = 100;
     }
 
     random () {
@@ -293,6 +297,7 @@ class Game {
         this.pL;
         this.pR;
         this.side = "";
+        this.allowBtn = false;
         this.ui = new UIcontroller;
 
         this.ui.frontBtn().addEventListener('click', () => {
@@ -308,6 +313,9 @@ class Game {
                 this.newGame()
             }else if (this.checkBtn(button, /attack/)) {
                 this.battle()
+            }else if(this.checkBtn(button, /opponent/)) {
+                if(!this.allowBtn) return
+                this.newOpponent()
             }
         })
     }
@@ -331,9 +339,12 @@ class Game {
         this.ui.pokemonData(left, "left")
         this.ui.pokemonData(right, "right")
         // Display arrow
+        this.resetSide();
         this.ui.rotateArrow(this.sideAttacks())
         // Clear logs
         this.ui.clearLogs()
+        // Block new opponent btn
+        this.allowBtn = false;
     }
 
     battle() {
@@ -386,7 +397,37 @@ class Game {
         this.ui.endStyle(pOne.percentage, this.side, pTwo.name);
         this.ui.winnerPrint(pOne.name);
         this.ui.logsDisplay();
+        this.allowBtn = true;
+    }
+
+    async newOpponent() {
+        if(this.side === "right") {
+            // Create new pokemons
+            this.pR = new Pokemon();
+            // Get pokemons' data
+            const right = await this.getPokemonData(this.pR);
+            // Display data
+            this.ui.pokemonData(right, "right")
+            // Reset opponent's data
+            this.pL.reset();
+        }else if (this.side === "left") {
+            // Create new pokemons
+            this.pL = new Pokemon();
+            // Get pokemons' data
+            const left = await this.getPokemonData(this.pL);
+            // Display data
+            this.ui.pokemonData(left, "left")
+            // Reset opponent's data
+            this.pR.reset();
+        }
+        // Reset both bar boxes
+        this.ui.resetBarBox("right");
+        this.ui.resetBarBox("left");
+        // Display arrow
         this.resetSide();
+        this.ui.rotateArrow(this.sideAttacks())
+        // Block new opponent btn
+        this.allowBtn = false;
     }
 
     sideAttacks() {
