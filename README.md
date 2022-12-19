@@ -5,10 +5,10 @@ Borba između pokemona. Pokemon s većom brzinom napada prvi a onaj koji prvi os
 
 ### Upute
 
-* Klik na "New Game" pokreće novu igricu
-* Klik na "Home" povratak na početnu stranicu
-* 
-
+Klik na "New Game" pokreće novu igricu
+Klik na "Home" povratak na početnu stranicu
+Klik na "Attack" pokreće napad pokemona
+Logs prozorčić prati tijek igrice
 
 ### Za razvoj korišteno:
 
