@@ -391,7 +391,7 @@ class Game {
 
     sideAttacks() {
         if(this.side.length === 0) {
-            this.pR.hp < this.pL.hp ? this.side = "right" : this.side = "left";
+            this.pR.speed < this.pL.speed ? this.side = "right" : this.side = "left";
         }else if(this.side === "right") {
             this.side = "left";
         }else {

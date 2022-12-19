@@ -106,6 +106,7 @@ p {
 }
 
 /*POKEMON BOX*/
+
 .box {
     grid-area: main;
     display: grid;
